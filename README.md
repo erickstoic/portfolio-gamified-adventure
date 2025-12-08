@@ -1,11 +1,34 @@
-<div align="center">
+# Erick Szekeres - Digital Explorer Portfolio
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+This is a Vibe Coded personal website designed for Erick Szekeres, built with React, Tailwind CSS, and Framer Motion.
 
-  <h1>Built with AI Studio</h2>
+## 🗺️ How to Update the Adventure Map
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+The website currently uses a placeholder abstract map image. To use your custom "Adventure Map" image:
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+1.  **Host your image:** Upload your map image to a reliable image host (like Imgur, AWS S3, or within your GitHub Pages `public` folder if available).
+2.  **Update code:**
+    *   Open `components/AdventureMap.tsx`.
+    *   Locate the variable `const mapImageUrl`.
+    *   Replace the URL string with your new image URL.
 
-</div>
+Example:
+```typescript
+const mapImageUrl = "./assets/my-adventure-map.jpg"; // If local
+// OR
+const mapImageUrl = "https://example.com/my-map.png"; // If remote
+```
+
+## 📍 Adjusting Map Hotspots
+
+To make the markers align perfectly with your custom map image:
+
+1.  Open `constants.tsx`.
+2.  Find the `HOTSPOTS` array.
+3.  Adjust the `x` (left percentage) and `y` (top percentage) values for each location until they align with your image's geography.
+
+## 🚀 Deployment
+
+This project is ready for GitHub Pages.
+1.  Run `npm run build`.
+2.  Deploy the `dist` or `build` folder.

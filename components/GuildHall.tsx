@@ -47,7 +47,7 @@ const GuildHall: React.FC = () => {
 
         <div className="max-w-xl mx-auto border-t border-gray-900 pt-8">
             <p className="text-gray-500 flex items-center justify-center gap-2 mb-2">
-                Built with <span className="text-purple-500 animate-pulse">💜</span> and Vibe Coding by Erick Szekeres.
+                Built with <span className="text-purple-500 animate-pulse">💜</span> and Vibe Coding by Erick Stoic.
             </p>
             <p className="text-bitcoinOrange font-bold flex items-center justify-center gap-2">
                 <Rocket size={16} /> Ready to join the ZBD party!

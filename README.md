@@ -1,6 +1,6 @@
-# Erick Szekeres - Digital Explorer Portfolio
+# Erick Stoic - Gamified Adventure Portfolio
 
-This is a Vibe Coded personal website designed for Erick Szekeres, built with React, Tailwind CSS, and Framer Motion.
+This is a Vibe Coded personal website designed for Erick Stoic, built with React, Tailwind CSS, and Framer Motion.
 
 ## 🗺️ How to Update the Adventure Map
 

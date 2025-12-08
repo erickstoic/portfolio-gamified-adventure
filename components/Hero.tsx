@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
           </h1>
 
           <h2 className="text-xl md:text-2xl text-gray-400 font-light mb-8 max-w-2xl mx-auto">
-            Erick Szekeres | Product Manager & Agile Strategist
+            Erick Stoic | Product Manager & Agile Strategist
           </h2>
 
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed border-l-2 border-bitcoinOrange pl-6 text-left md:text-center md:border-l-0 md:border-t-2 md:pt-6 border-opacity-50">

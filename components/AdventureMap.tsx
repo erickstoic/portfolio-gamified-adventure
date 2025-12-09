@@ -1,31 +1,28 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HOTSPOTS } from '../constants';
-import { MapPin, GripHorizontal, RefreshCw } from 'lucide-react';
+import { MapPin, GripHorizontal, RefreshCw, Crosshair } from 'lucide-react';
 import { Hotspot } from '../types';
 
 const AdventureMap: React.FC = () => {
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
   const [hotspots, setHotspots] = useState<Hotspot[]>(HOTSPOTS);
   const [isDragging, setIsDragging] = useState(false);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [snapPreview, setSnapPreview] = useState<{ x: number, y: number } | null>(null);
   const mapRef = useRef<HTMLDivElement>(null);
 
-  // NOTE: Swapped to a fantasy map that closely resembles the "Islands/Citadel" vibe.
-  // Replace this URL with your uploaded file path (e.g., '/assets/my-map.png') to use the exact image provided.
-  const mapImageUrl = "https://images.unsplash.com/photo-1577717473851-e3776b6d4941?q=80&w=2600&auto=format&fit=crop";
+  // Updated to the user-provided Adventure Map image
+  const mapImageUrl = "https://thesustainableproductivity.com/wp-content/uploads/2025/12/career-adventure-map-6.webp";
 
-  const handleDragEnd = (event: any, info: any, id: string) => {
-    setIsDragging(false);
-    if (!mapRef.current) return;
+  // Helper to calculate grid position
+  const calculateGridPos = (point: { x: number, y: number }) => {
+    if (!mapRef.current) return { x: 0, y: 0 };
 
     const mapRect = mapRef.current.getBoundingClientRect();
-    const point = info.point;
-    
-    // Calculate position relative to the map container
     const relativeX = point.x - mapRect.left;
     const relativeY = point.y - mapRect.top;
 
-    // Convert to percentage
     let percentX = (relativeX / mapRect.width) * 100;
     let percentY = (relativeY / mapRect.height) * 100;
 
@@ -33,13 +30,34 @@ const AdventureMap: React.FC = () => {
     percentX = Math.round(percentX / 5) * 5;
     percentY = Math.round(percentY / 5) * 5;
 
-    // Clamp values to ensure they stay within the map with some padding
+    // Clamp
     percentX = Math.max(2, Math.min(98, percentX));
     percentY = Math.max(5, Math.min(95, percentY));
 
+    return { x: percentX, y: percentY };
+  };
+
+  const handleDragStart = (id: string) => {
+    setIsDragging(true);
+    setDraggedId(id);
+    setActiveHotspot(null);
+  };
+
+  const handleDrag = (event: any, info: any) => {
+    const gridPos = calculateGridPos(info.point);
+    setSnapPreview(gridPos);
+  };
+
+  const handleDragEnd = (event: any, info: any, id: string) => {
+    setIsDragging(false);
+    setDraggedId(null);
+    setSnapPreview(null);
+    
+    const gridPos = calculateGridPos(info.point);
+
     // Update state to snap the marker visually
     setHotspots(prev => prev.map(h => 
-      h.id === id ? { ...h, x: percentX, y: percentY } : h
+      h.id === id ? { ...h, x: gridPos.x, y: gridPos.y } : h
     ));
   };
 
@@ -82,19 +100,36 @@ const AdventureMap: React.FC = () => {
             />
             
             {/* Vibe Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-void/80 via-transparent to-void/20 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-void/60 via-transparent to-void/10 pointer-events-none" />
             
-            {/* Grid System - Fades in when dragging */}
+            {/* Grid System */}
             <div 
-              className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isDragging ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'}`}
+              className={`absolute inset-0 pointer-events-none transition-all duration-300 ${isDragging ? 'opacity-30' : 'opacity-0 group-hover:opacity-10'}`}
               style={{ 
                 backgroundImage: `
-                  linear-gradient(to right, #00ff41 1px, transparent 1px),
-                  linear-gradient(to bottom, #00ff41 1px, transparent 1px)
+                  linear-gradient(to right, rgba(0, 255, 65, 0.2) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(0, 255, 65, 0.2) 1px, transparent 1px)
                 `,
                 backgroundSize: '5% 5%' 
               }} 
             />
+
+            {/* Ghost Snap Preview */}
+            <AnimatePresence>
+              {isDragging && snapPreview && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  className="absolute z-10 w-8 h-8 pointer-events-none -translate-x-1/2 -translate-y-1/2"
+                  style={{ top: `${snapPreview.y}%`, left: `${snapPreview.x}%` }}
+                >
+                  <div className="w-full h-full border-2 border-dashed border-neonGreen/50 rounded-full animate-pulse shadow-[0_0_15px_rgba(0,255,65,0.3)] bg-neonGreen/10 flex items-center justify-center">
+                    <Crosshair size={12} className="text-neonGreen/70" />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Hotspots */}
             {hotspots.map((spot) => (
@@ -106,27 +141,28 @@ const AdventureMap: React.FC = () => {
                 dragMomentum={false}
                 dragElastic={0}
                 dragConstraints={mapRef}
-                onDragStart={() => setIsDragging(true)}
+                onDragStart={() => handleDragStart(spot.id)}
+                onDrag={handleDrag}
                 onDragEnd={(e, info) => handleDragEnd(e, info, spot.id)}
                 onMouseEnter={() => !isDragging && setActiveHotspot(spot.id)}
                 onMouseLeave={() => setActiveHotspot(null)}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                whileDrag={{ scale: 1.2, zIndex: 100 }}
+                whileDrag={{ scale: 1.1, zIndex: 100 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 {/* Pulse Effect Background */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
-                  <div className={`w-full h-full rounded-full bg-neonGreen/30 ${activeHotspot === spot.id ? 'animate-ping' : ''}`} />
+                  <div className={`w-full h-full rounded-full bg-neonGreen/30 ${activeHotspot === spot.id && !isDragging ? 'animate-ping' : ''}`} />
                 </div>
 
                 {/* Marker Icon */}
                 <motion.div
                   className={`relative p-2 rounded-full -translate-x-1/2 -translate-y-1/2 
-                    ${activeHotspot === spot.id ? 'bg-neonGreen text-black z-30' : 'bg-gray-900/90 text-neonGreen z-20'} 
+                    ${activeHotspot === spot.id || draggedId === spot.id ? 'bg-neonGreen text-black z-30' : 'bg-gray-900/90 text-neonGreen z-20'} 
                     border-2 border-neonGreen backdrop-blur-sm shadow-[0_0_15px_rgba(0,255,65,0.4)]`}
                   animate={{ 
-                    boxShadow: activeHotspot === spot.id ? "0px 0px 30px rgba(0,255,65,0.8)" : "0px 0px 15px rgba(0,255,65,0.2)" 
+                    boxShadow: activeHotspot === spot.id || draggedId === spot.id ? "0px 0px 30px rgba(0,255,65,0.8)" : "0px 0px 15px rgba(0,255,65,0.2)" 
                   }}
                 >
                   <MapPin size={24} fill={activeHotspot === spot.id ? "currentColor" : "none"} />
@@ -171,7 +207,9 @@ const AdventureMap: React.FC = () => {
           </div>
           
           <div className="absolute bottom-4 left-4 text-[10px] text-neonGreen/60 font-mono">
-            COORDS: {hotspots[0].x.toFixed(0)}, {hotspots[0].y.toFixed(0)} | GRID: ACTIVE
+            {isDragging && snapPreview 
+              ? `TARGET: ${snapPreview.x}, ${snapPreview.y}` 
+              : "SYSTEM: ONLINE | DRAG MARKERS ENABLED"}
           </div>
         </div>
       </div>

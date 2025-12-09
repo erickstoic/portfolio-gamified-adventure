@@ -5,28 +5,83 @@ import { ChevronDown, Zap } from 'lucide-react';
 const Hero: React.FC = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Particles (Simulated with simple divs for performance) */}
+      {/* Background Particles - Enhanced Visibility */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {/* Layer 1: Larger, Glowing Particles */}
+        {[...Array(35)].map((_, i) => (
           <motion.div
-            key={i}
-            className="absolute rounded-full bg-white opacity-10"
+            key={`large-${i}`}
+            className="absolute rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.6)]"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              scale: Math.random() * 0.5 + 0.5,
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+              opacity: Math.random() * 0.4 + 0.2, 
+              scale: Math.random() * 0.5 + 0.8,
             }}
             animate={{
-              y: [null, Math.random() * window.innerHeight],
+              y: [null, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000)],
+              opacity: [null, Math.random() * 0.5 + 0.3, null],
             }}
             transition={{
-              duration: Math.random() * 10 + 10,
+              duration: Math.random() * 25 + 20,
               repeat: Infinity,
               ease: "linear",
             }}
             style={{
-              width: Math.random() * 4 + 1 + 'px',
-              height: Math.random() * 4 + 1 + 'px',
+              width: Math.random() * 6 + 3 + 'px',
+              height: Math.random() * 6 + 3 + 'px',
+            }}
+          />
+        ))}
+
+        {/* Layer 2: Smaller, Twinkling Stars */}
+        {[...Array(80)].map((_, i) => (
+          <motion.div
+            key={`small-${i}`}
+            className="absolute rounded-full bg-neonGreen/50"
+            initial={{
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
+              opacity: Math.random() * 0.5 + 0.2,
+            }}
+            animate={{
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: Math.random() * 4 + 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            style={{
+              width: Math.random() * 3 + 1 + 'px',
+              height: Math.random() * 3 + 1 + 'px',
+            }}
+          />
+        ))}
+
+        {/* Layer 3: Occasional Shooting Star */}
+         {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={`shooting-${i}`}
+            className="absolute h-px bg-gradient-to-r from-transparent via-white to-transparent"
+            initial={{
+              x: -100,
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 500),
+              opacity: 0,
+              width: 0,
+            }}
+            animate={{
+              x: (typeof window !== 'undefined' ? window.innerWidth : 1000) + 100,
+              opacity: [0, 1, 0],
+              width: [0, 150, 0],
+            }}
+            transition={{
+              duration: 2,
+              delay: Math.random() * 10,
+              repeat: Infinity,
+              repeatDelay: Math.random() * 15 + 5,
+              ease: "linear",
             }}
           />
         ))}

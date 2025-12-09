@@ -5,31 +5,45 @@ import { Sword, Brain, Gem, Bot, MapPin, Scroll, Users, Shield } from 'lucide-re
 export const HOTSPOTS: Hotspot[] = [
   {
     id: 'citadel',
-    name: 'The Agile Citadel (Nubank)',
-    description: 'Reduced Cycle Time from 45d to 15d. Optimized delivery for Fixed Income Investment portfolios ($B AUM).',
+    name: 'Agile Citadel (Central Hub)',
+    description: 'Headquarters for Nubank, Novobanco & GPTW. Scaled agile frameworks and reduced cycle times (45d → 15d) for billion-dollar portfolios.',
     x: 48,
-    y: 28, // Aligns with "Agile Development Citadel" (Top Center)
+    y: 35, // Central
   },
   {
-    id: 'dungeon',
-    name: 'The Efficiency Maze (PagSeguro)',
-    description: 'Reduced Lead Time from 20 days to 5 minutes. Facilitated 21 Workshops for 500+ staff.',
-    x: 22,
-    y: 62, // Aligns with "The Methodologist's Maze" (Bottom Left)
+    id: 'itau',
+    name: 'Itaú Tower',
+    description: 'Latin America\'s largest bank. Led digital transformation initiatives and optimized delivery value streams for Fixed Income portfolios.',
+    x: 44,
+    y: 32, // Top-left of Citadel
   },
   {
-    id: 'tower',
-    name: 'The Energy Citadel (Novobanco)',
-    description: 'Mentoring Product Owners in Wealth Management & Financial Crime. Streamlining KYC & Onboarding flows.',
-    x: 80,
-    y: 68, // Aligns with "The Energy Management Citadel" (Bottom Right)
+    id: 'pagseguro',
+    name: 'PagSeguro Fortress',
+    description: 'The Efficiency Engine. Reduced infrastructure lead time from 20 days to 5 minutes. Facilitated 21 workshops for 500+ staff.',
+    x: 52,
+    y: 38, // Bottom-right of Citadel
   },
   {
-    id: 'shrine',
-    name: 'The Coding Cove (Side Project)',
-    description: 'Founder of The Sustainable Productivity Method. Expert in Energy Management & Async Work.',
-    x: 78,
-    y: 25, // Aligns with "AI Vibe Coding Cove" (Top Right)
+    id: 'maze',
+    name: 'Maze & Wilderness',
+    description: 'The Public Sector & Consultancy Grind: Iteris, Galp, Everis/NTT, Qualicorp & Brazilian Army. Forged resilience navigating bureaucracy and complex legacy systems.',
+    x: 20,
+    y: 65, // Left / Wilderness Area
+  },
+  {
+    id: 'cove',
+    name: 'Innovation Cove',
+    description: 'Side Quests & Impact: Founder of The Sustainable Productivity Method and YourLifeMatters.me. Experimenting with AI, Vibe Coding, and Social Good.',
+    x: 75,
+    y: 28, // Right / Cove Area
+  },
+  {
+    id: 'ruins',
+    name: 'Foundational Ruins',
+    description: 'The "Old Ways" left behind: Command & Control, Micro-management, Silos, Ego, and Workaholism. I help teams bury these anti-patterns to build empathy-driven systems.',
+    x: 55,
+    y: 82, // Bottom / Ruins Area
   },
 ];
 
